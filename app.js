@@ -33,7 +33,7 @@ app.use('/',require('./routes/router'))
 //app.use(cookieParser)
 
 
-app.listen(4000, ()=>{
+app.listen(3000, ()=>{
     console.log("servidor corriendo")
 })
 
