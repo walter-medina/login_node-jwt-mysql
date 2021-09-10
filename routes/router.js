@@ -28,6 +28,5 @@ router.get('/register',(req,res)=>{
 
 //rutas para los metodos del controller, eventos del formulario
 router.post('/register',authController.register)
-
-
+router.post('/login',authController.login)
 module.exports=router
