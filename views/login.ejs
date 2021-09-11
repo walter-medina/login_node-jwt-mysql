@@ -38,10 +38,29 @@
     
   </form>
   <br>
-  <a type="button" class="w-100 btn btn-lg btn-bd-primary">Registrarse</a>
+  <a href="/register" type="button" class="w-100 btn btn-lg btn-bd-primary">Registrarse</a>
 </main>
 
+<!--para hacer las alertas-->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<% if (alerta){%>
+  <script>
+    Swal.fire({
+      title:'<%= titulo %>',
+      text:'<%= mensaje %>',
+      icon:'<%=alertIcon %>',
+      showConfirmButton:<%= showConfirmButton%>,
+      timer:<%= tiempo %>
 
+    }).then( ()=>{
+      //sino ingreso nada me debe dirigir al login nuevamente;
+      window.location='/<%= ruta %>'
+
+    })
+  </script>
+
+
+<%}%>
     
   </body>
 </html>

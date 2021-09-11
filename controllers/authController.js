@@ -15,7 +15,7 @@ exports.register=async(req,res)=>{
     const name=req.body.nombre
     const user=req.body.usuario
     const pass=req.body.password  
-    let passwordEncriptada=await cbcryptjs.hash(pass,8)//encriptando la pass que llega,el 8 es el nivel de encriptamiento, va hasta 12
+    let passwordEncriptada=await bcryptjs.hash(pass,8)//encriptando la pass que llega,el 8 es el nivel de encriptamiento, va hasta 12
 
     //una vez atrape los datos del formulario lo ingreso a la bd
     conexion.query('INSERT INTO usuario SET ?',{user:user,name:name,pass:passwordEncriptada},(error,results)=>{
@@ -40,7 +40,24 @@ exports.login=async (req,res)=>{
        
     const user=req.body.usuario
     const pass=req.body.pass
-    console.log(user+"  "+pass)
+  
+   if(!user || !pass){//si no hay datos ingresado en el login entonces manda alerta:
+    res.render('login',{
+        //datos de la alerta
+        alerta:true,
+        titulo:"Advertencia",
+        mensaje:"Ingrese un usuario y pass",
+        alertIcon:'info',
+        showConfirmButton:true,
+        tiempo:false,
+        ruta:'login'
+
+    })
+   }else{
+       //en caso de que si se ingreso un usuario:
+
+   }
+
         
     } catch (error) {
         

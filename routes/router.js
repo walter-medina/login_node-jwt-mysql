@@ -19,7 +19,7 @@ router.get('/',(req,res)=>{
 })
 
 router.get('/login',(req,res)=>{
-    res.render('login')
+    res.render('login',{alerta:false})
 })
 
 router.get('/register',(req,res)=>{
