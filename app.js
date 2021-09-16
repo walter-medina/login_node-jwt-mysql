@@ -23,7 +23,7 @@ app.use('/',require('./routes/router'))
 
 //para poder trabajar con las cookies:
 
-//app.use(cookieParser)
+app.use(cookieParser())
 
 
 app.listen(3000, ()=>{

@@ -46,7 +46,7 @@ exports.login=async (req,res)=>{
         //datos de la alerta
         alerta:true,
         titulo:"Advertencia",
-        mensaje:"Ingrese un usuario y pass",
+        mensaje:"Usuario y/o password incorrectas",
         alertIcon:'info',
         showConfirmButton:true,
         tiempo:false,
@@ -54,12 +54,60 @@ exports.login=async (req,res)=>{
 
     })
    }else{
-       //en caso de que si se ingreso un usuario:
+       //en caso de que si se ingreso un usuario, entonces se hace consulta a la base de datos
+       conexion.query('SELECT * FROM usuario WHERE user=?',[user],async (error,results)=>{
+           if(results.length==0 || !(await  bcryptjs.compare(pass,results[0].pass))){//comparando contraseñas,sino coinciden:
+            res.render('login',{
+                alerta:true,
+                titulo:"Advertencia",
+                mensaje:"Usuario y/o password incorrectas",
+                alertIcon:'error',
+                showConfirmButton:true,
+                tiempo:false,
+                ruta:'login'
+
+            })
+
+           }
+           else{//si el inicio de sesion es el correcto entonces:
+            const id=results[0].id
+            const token=jwt.sign({id:id},process.env.JWT_SECRETO,{
+                expiresIn:process.env.JWT_TIEMPO_EXPIRA
+            })
+            //otra forma de generar el token sin fecha de expiracion: 
+            //const token =jwt.sign({id:id},process.env.JWT_SECRETO)
+            console.log("token: "+token+" para el usuario "+user)
+
+            //para las cookies:
+            const cookiesOptions={
+                expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 1000),
+                httpOnly:true
+            }
+            res.cookie('jwt',token,cookiesOptions)
+
+            res.render('login',{
+                alerta:true,
+                titulo:"Conexión Exitosa",
+                mensaje:"Login Correcto !!",
+                alertIcon:'success',
+                showConfirmButton:false,
+                tiempo:800,
+                ruta:''
+
+            })
+
+
+           }
+
+
+       })
+
 
    }
 
         
     } catch (error) {
+        console.log(error)
         
     }
 
